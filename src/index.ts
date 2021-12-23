@@ -1,13 +1,15 @@
 import fs from 'fs';
+import { AppConfig } from './appconfig';
+const { Spot } = require('@binance/connector')
 
-var mystring: string = "mystring";
-var API_KEY: string = "RR5iukRhR8xqmm3ANFPdtfPbK9caBiKZjfMm4v5Uxa9UgzB4FhRZxlcASzriyf1v"
-var SECRET_KEY: string | undefined = process.env.SECRET_API_KEY;
-if (SECRET_KEY === undefined) {
+async function myFunction() {
+    const client = new Spot(AppConfig.fetchApiKey(), AppConfig.fetchSecretKey())
     try {
-        var secret_key: string = fs.readFileSync("/Users/thomasraddatz/binance/binance_secret.txt").toString('utf-8');
-        secret_key = secret_key.split('\n')[0]
-    } catch (error) {
-        throw new Error("Secret Key must be defined: " + error);
+        var accountData = await client.account();
+    } catch (error: any) {
+        console.log(error.response.data.msg);
     }
 }
+
+myFunction()
+console.log("done")
